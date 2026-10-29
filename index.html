@@ -83,17 +83,37 @@
     <p id="valiny"></p>
   </div>
 
-  <script>
-    document.getElementById("inscription")
-      .addEventListener("submit", function(e) {
-        e.preventDefault();
-        let anarana =
-          document.getElementById("anarana").value.trim();
+  
+<script>
+  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwqRWezTSnw1-bgqRwcgwKv_9tp9uX0ExSx5Zr93D9qiCj7IVzVKeTsHy8GA4mTf3ro/exec";
 
+  document.getElementById("inscription")
+    .addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const donnees = {
+        anarana: document.getElementById("anarana").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        telefaonina: document.getElementById("telefaonina").value.trim(),
+        taona: document.getElementById("taona").value,
+        sexe: document.getElementById("sexe").value
+      };
+
+      fetch(URL_WEB_APP, {
+        method: "POST",
+        body: JSON.stringify(donnees)
+      })
+      .then(() => {
         document.getElementById("valiny").innerText =
-          "Misaotra, " + anarana +
-          "! Vita ny fitsapana ny formulaire.";
+          "Misaotra! Nalefa ny fangatahanao.";
+        document.getElementById("inscription").reset();
+      })
+      .catch(() => {
+        document.getElementById("valiny").innerText =
+          "Tsy nety ny fandefasana. Andramo indray.";
       });
+    });
+
   </script>
 </body>
 </html>
