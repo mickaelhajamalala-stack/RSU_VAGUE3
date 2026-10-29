@@ -101,37 +101,71 @@
   
 <script>
   const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwSJJl4uO5eq9drBJegq5dx-GWR5VDmI-f1Nq-uEidRWlk6HQqlZZlpHJG-VeWnug94xw/exec";
+  
+document.getElementById("inscription")
+  .addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-  document.getElementById("inscription")
-    .addEventListener("submit", function(e) {
-      e.preventDefault();
-   
-const donnees = {
-  anarana: document.getElementById("anarana").value.trim(),
-  email: document.getElementById("email").value.trim(),
-  telefaonina: document.getElementById("telefaonina").value.trim(),
-  taona: document.getElementById("taona").value,
-  sexe: document.getElementById("sexe").value,
-  cin: document.getElementById("cin").value.trim(),
-  date_naissance: document.getElementById("date_naissance").value,
-  asa: document.getElementById("asa").value.trim(),
-  adresse: document.getElementById("adresse").value.trim()
-};
-      
-      fetch(URL_WEB_APP, {
-        method: "POST",
-        body: JSON.stringify(donnees)
-      })
-      .then(() => {
-        document.getElementById("valiny").innerText =
-          "Misaotra! Nalefa ny fangatahanao.";
-        document.getElementById("inscription").reset();
-      })
-      .catch(() => {
-        document.getElementById("valiny").innerText =
-          "Tsy nety ny fandefasana. Andramo indray.";
-      });
+    const inputSary = document.getElementById("sary");
+    const rakitraSary = inputSary.files[0];
+
+    if (!rakitraSary) {
+      document.getElementById("valiny").innerText =
+        "Misafidiana sary aloha.";
+      return;
+    }
+
+    if (rakitraSary.size > 2 * 1024 * 1024) {
+      document.getElementById("valiny").innerText =
+        "Lehibe loatra ilay sary. Mifidiana sary latsaky ny 2 Mo.";
+      return;
+    }
+
+    const saryBase64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(rakitraSary);
     });
+
+    const donnees = {
+      anarana: document.getElementById("anarana").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      telefaonina: document.getElementById("telefaonina").value.trim(),
+      taona: document.getElementById("taona").value,
+      sexe: document.getElementById("sexe").value,
+      cin: document.getElementById("cin").value.trim(),
+      date_naissance: document.getElementById("date_naissance").value,
+      asa: document.getElementById("asa").value.trim(),
+      adresse: document.getElementById("adresse").value.trim(),
+      saryBase64: saryBase64,
+      saryType: rakitraSary.type || "image/jpeg",
+      saryNom: rakitraSary.name
+    };
+
+    document.getElementById("valiny").innerText =
+      "Eo am-pandefasana...";
+
+    fetch(URL_WEB_APP, {
+      method: "POST",
+      body: JSON.stringify(donnees)
+    })
+    .then(response => response.json())
+    .then(resultat => {
+      if (resultat.succes) {
+        document.getElementById("valiny").innerText =
+          "Vita ny fandefasana, voatahiry ny sary.";
+        document.getElementById("inscription").reset();
+      } else {
+        document.getElementById("valiny").innerText =
+          "Nisy olana: " + (resultat.erreur || "Tsy voatahiry ny angona.");
+      }
+    })
+    .catch(() => {
+      document.getElementById("valiny").innerText =
+        "Tsy voamarina ny valin'ny fandefasana. Jereo ny Google Sheets sy Drive.";
+    });
+});
 
   </script>
 </body>
