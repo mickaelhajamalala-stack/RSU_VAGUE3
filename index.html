@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fisoratana anarana</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eaf0ff;
+      padding: 20px 12px;
+    }
+    .formulaire {
+      background: white;
+      max-width: 420px;
+      margin: auto;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px #c5d0e5;
+    }
+    h1 { color: #2457d6; text-align: center; }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 7px;
+      border: 1px solid #ccd2df;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+    }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #2457d6;
+      color: white;
+      font-size: 17px;
+    }
+    #valiny {
+      text-align: center;
+      color: #087443;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="formulaire">
+    <h1>Fisoratana anarana</h1>
+    <p>Fenoy ny mombamomba anao.</p>
+
+    <form id="inscription">
+      <label>Anarana feno</label>
+      <input id="anarana" type="text" required>
+
+      <label>Adiresy mailaka</label>
+      <input id="email" type="email" required>
+
+      <label>Laharana finday</label>
+      <input id="telefaonina" type="tel" required>
+
+      <label>Taona</label>
+      <input id="taona" type="number" min="1" max="120" required>
+
+      <label>Sexe</label>
+      <select id="sexe" required>
+        <option value="">Safidio</option>
+        <option>Lehilahy</option>
+        <option>Vehivavy</option>
+      </select>
+
+      <button type="submit">Hisoratra anarana</button>
+    </form>
+
+    <p id="valiny"></p>
+  </div>
+
+  <script>
+    document.getElementById("inscription")
+      .addEventListener("submit", function(e) {
+        e.preventDefault();
+        let anarana =
+          document.getElementById("anarana").value.trim();
+
+        document.getElementById("valiny").innerText =
+          "Misaotra, " + anarana +
+          "! Vita ny fitsapana ny formulaire.";
+      });
+  </script>
+</body>
+</html>
